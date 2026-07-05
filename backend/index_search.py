@@ -89,19 +89,13 @@ def search(db_path, query, top_k=20):
         })
     
     video_results.sort(key=lambda x: x["score"])
-
-    print(json.dumps(video_results[:top_k]))
-    # Print JSON on its own line so renderer.js can parse it
-    # output = [
-    #     {
-    #         'frame_path':   r['frame_path'],
-    #         'source_video': r['source_video'],
-    #         'timestamp_sec': r['timestamp_sec'],
-    #         'distance':     r.get('_distance', 0)
-    #     }
-    #     for r in results
-    # ]
-    # print(json.dumps(output))
+    best_score = video_results[0]["score"]
+    threshold = best_score * 1.25
+    filtered = [
+        v for v in video_results if v["score"] <= threshold 
+    ]
+    
+    print(json.dumps(filtered[:top_k]))
 
 if __name__ == '__main__':
     mode = sys.argv[1]

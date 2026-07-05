@@ -57,7 +57,7 @@ document.getElementById('search-btn').addEventListener('click', doSearch)
 searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch() })
 
 function renderResults (results){
-    results.innerHTML = ''
+    resultsEl.innerHTML = ''
     if (!results.length) {
     resultsEl.innerHTML = '<div id="empty">No results found. Try different search terms.</div>'
     return
@@ -70,7 +70,7 @@ function renderResults (results){
     const secs = Math.floor(r.timestamp_sec%60).toString().padStart(2,'0')
     const timeLabel = `${mins}:${secs}`
     card.innerHTML = `
-    <img src="file://${r.frame_path}" alt="${filename} at ${timeLabel}" />
+    <img src="file://${r.best_frame}" alt="${filename} at ${timeLabel}" />
     <div class="result-info">
         <div class="result-file">${filename}</div>
         <div class="result-time">▶ ${timeLabel}</div>
