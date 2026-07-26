@@ -1,4 +1,4 @@
-const {app , BrowserWindow , ipcMain, dialog} = require('electron');
+const {app , BrowserWindow , ipcMain, dialog , shell} = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { spawn } = require('child_process')
@@ -100,3 +100,17 @@ ipcMain.handle('search', async (event , {query , dbPath , framesDir})=>{
     const jsonLine = lines.findLast(l=>l.startsWith('['))
     return jsonLine ? JSON.parse(jsonLine) : []
 })
+ipcMain.handle('rename-video', async (event, { oldPath, newName }) => {
+  const dir     = path.dirname(oldPath)
+  const ext     = path.extname(oldPath)
+  const newPath = path.join(dir, newName.endsWith(ext) ? newName : newName + ext)
+  try {
+    fs.renameSync(oldPath, newPath)
+    return { success: true, newPath }
+  } catch (err) {
+    return { success: false, error: err.message }
+  }
+})
+ipcMain.handle('open-video', async (_, videoPath) => {
+    return shell.openPath(videoPath);
+});

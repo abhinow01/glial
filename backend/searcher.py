@@ -20,7 +20,7 @@ import numpy as np
 
 from config import VIDEO_CANDIDATES, SIMILARITY_THRESHOLD, CLUSTER_GAP_SEC, MIN_GAP_TO_FILTER
 from embedder import embed_text
-
+from scene_detector import get_video_duration
 
 def search(db_path: str, query: str, top_k: int = 10) -> list:
     db = lancedb.connect(db_path)
@@ -100,6 +100,7 @@ def search(db_path: str, query: str, top_k: int = 10) -> list:
             'frame_score':     round(best['distance'], 4),
             'confidence':      round((1 - best['distance'] / 2) * 100, 1),  # rescaled to 0-100
             'matching_scenes': len(clusters),
+            'duration' : round(get_video_duration(video_path), 2)
         })
 
     results.sort(key=lambda x: x['frame_score'])
