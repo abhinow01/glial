@@ -3,3 +3,6 @@ torch
 lancedb
 Pillow
 pyarrow
+numpy
+pandas
+scenedetect[opencv]

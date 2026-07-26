@@ -43,10 +43,15 @@ function runPython(scriptName, args = [], onData) {
             }
         );
 
-        proc.stdout.on("data", (data) => {
-            const text = data.toString();
-            if (onData) onData(text);
-        });
+proc.stdout.on("data", (data) => {
+    const text = data.toString();
+
+    console.log("[python stdout]", text);
+
+    if (onData) {
+        onData(text);
+    }
+});
 
         proc.stderr.on("data", (data) => {
             console.error("[python stderr]", data.toString());
@@ -68,17 +73,16 @@ function runPython(scriptName, args = [], onData) {
 ipcMain.handle('index-folder', async (event, folderPath) => {
   const framesDir = path.join(app.getPath('userData'), 'frames')
   const dbPath    = path.join(app.getPath('userData'), 'lancedb')
+//   const ffmpegPath = process.env.FFMPEG_PATH || 'ffmpeg'
   fs.mkdirSync(framesDir, { recursive: true })
 
-  // Step 1: extract frames
-  mainWindow.webContents.send('status', 'Extracting frames...')
-  await runPython('extract_frames.py', [folderPath, framesDir, '1.5'],
-    (msg) => mainWindow.webContents.send('status', msg.trim()))
+  mainWindow.webContents.send('status', 'Detecting scenes and indexing footage...')
 
-  // Step 2: embed + index
-  mainWindow.webContents.send('status', 'Embedding frames with CLIP (first run downloads model, ~1 min)...')
-  await runPython('index_search.py', ['index', framesDir, dbPath],
-    (msg) => mainWindow.webContents.send('status', msg.trim()))
+  await runPython(
+    'index_search.py',
+    ['index', folderPath, dbPath, framesDir, ffmpegPath],
+    (msg) => mainWindow.webContents.send('status', msg.trim())
+  )
 
   mainWindow.webContents.send('status', 'Done! Ready to search.')
   return { framesDir, dbPath }
