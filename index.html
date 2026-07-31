@@ -35,7 +35,7 @@
     #folder-path {
       flex: 1;
       background: #1a1a1a;
-      border: 1px solid #333;
+      border: 1px solid #fff;
       border-radius: 8px;
       padding: 8px 12px;
       color: #999;
@@ -45,8 +45,8 @@
       text-overflow: ellipsis;
     }
     button {
-      background: #2a2a2a;
-      border: 1px solid #444;
+      background: #0000;
+      border: 1px solid #fff;
       border-radius: 8px;
       color: #e0e0e0;
       padding: 8px 16px;
@@ -54,13 +54,17 @@
       cursor: pointer;
       white-space: nowrap;
     }
-    button:hover { background: #333; }
+    button:hover { background: #ffff; color: #000 }
     #index-btn {
-      background: #7c3aed;
-      border-color: #7c3aed;
+      background: #0000;
+      border-color: #fff;
       color: #fff;
     }
-    #index-btn:hover { background: #6d28d9; }
+    #index-btn:hover 
+    { 
+    background: #fff;
+    color: #000; 
+  }
     #search-row {
       display: flex;
       gap: 10px;
@@ -68,21 +72,26 @@
     #search-input {
       flex: 1;
       background: #1a1a1a;
-      border: 1px solid #333;
+      border: 1px solid #fff;
       border-radius: 8px;
       padding: 10px 16px;
       color: #e0e0e0;
       font-size: 15px;
       outline: none;
     }
-    #search-input:focus { border-color: #7c3aed; }
+    #search-input:focus { border-color: #fff; }
     #search-btn {
-      background: #7c3aed;
-      border-color: #7c3aed;
+      background: #0000;
+      border-color: #ffff;
       color: #fff;
       padding: 10px 20px;
       font-size: 15px;
     }
+    #search-btn:hover{
+      background: #fff;
+      color: #000
+    }
+
     #status {
       padding: 8px 24px;
       font-size: 12px;
@@ -154,6 +163,26 @@
   display: block;
   background: #111;
 }
+.thumb-wrap[draggable="true"] {
+  cursor: grab;
+}
+.thumb-wrap[draggable="true"]:active {
+  cursor: grabbing;
+}
+.thumb-wrap::after {
+  content: '⠿';
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  color: rgba(255,255,255,0.6);
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.thumb-wrap:hover::after {
+  opacity: 1;
+}
 .timestamp-badge {
   position: absolute;
   bottom: 6px;
@@ -192,7 +221,7 @@
 }
 .rename-btn {
   background: #2a2a2a;
-  border: 1px solid #444;
+  border: 1px solid #ffff;
   border-radius: 5px;
   color: #ccc;
   padding: 4px 10px;

@@ -6,5 +6,6 @@ contextBridge.exposeInMainWorld('api', {
   search:       (params)        => ipcRenderer.invoke('search', params),
   renameVideo:  (params)   => ipcRenderer.invoke('rename-video', params),
   openVideo: (videoPath) => ipcRenderer.invoke('open-video', videoPath),
+  startDrag:    (params) => ipcRenderer.send('drag-start', params),
   onStatus:     (callback)     => ipcRenderer.on('status', (_, msg) => callback(msg))
 })

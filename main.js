@@ -4,6 +4,7 @@ const fs = require('fs');
 const { spawn } = require('child_process')
 const ffmpegPath = require("ffmpeg-static");
 let mainWindow;
+const { nativeImage } = require('electron')
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -114,3 +115,17 @@ ipcMain.handle('rename-video', async (event, { oldPath, newName }) => {
 ipcMain.handle('open-video', async (_, videoPath) => {
     return shell.openPath(videoPath);
 });
+ipcMain.on('drag-start', (event, { videoPath, thumbnailPath }) => {
+  // nativeImage for the drag icon — shown under cursor while dragging
+  let icon
+  try {
+    icon = nativeImage.createFromPath(thumbnailPath).resize({ width: 128, height: 72 })
+  } catch {
+    icon = nativeImage.createEmpty()
+  }
+
+  event.sender.startDrag({
+    file: videoPath,   // the actual file the OS drops into the target app
+    icon              // preview shown under the cursor
+  })
+})

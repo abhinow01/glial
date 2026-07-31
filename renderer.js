@@ -106,11 +106,22 @@ function renderResults (results){
           <button class="rename-btn">Rename</button>
         </div>
       </div>`
-  card.querySelector('.thumb-wrap').addEventListener('click', () => {
+      const thumbWrap = card.querySelector('.thumb-wrap')
+      thumbWrap.setAttribute('draggable', 'true')
+      thumbWrap.addEventListener('dragstart', (e) => {
+  // Must prevent default — Electron's startDrag takes over from here
+  e.preventDefault()
+  window.api.startDrag({
+    videoPath:     r.source_video,
+    thumbnailPath: r.best_frame
+  })
+})
+  thumbWrap.addEventListener('click', () => {
       // const { shell } = require('electron')
       // shell.openPath(r.source_video)
       window.api.openVideo(r.source_video);
     })
+
     const renameBtn   = card.querySelector('.rename-btn')
     const renameInput = card.querySelector('.rename-input')
     const ext         = r.source_video.split('.').pop()
